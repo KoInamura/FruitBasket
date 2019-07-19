@@ -103,21 +103,4 @@ class Main is Game, FocusListener
 
     action Update(number seconds)
     end
-
-    action GainedFocus(FocusEvent event)
-        Control previous = cast(Control, event:GetLastFocus())
-
-        if previous is Button
-            previous:SetName(previous:GetName():ToUpperCase())
-            previous:LoadGraphics(previous:GetCurrentLayoutProperties())
-        end
-    end
-
-    action LostFocus(FocusEvent event)
-        Control previous = cast(Control, event:GetLastFocus())
-
-        if previous is Button
-            previous:SetName(previous:GetName():ToLowerCase())
-        end
-    end
 end
