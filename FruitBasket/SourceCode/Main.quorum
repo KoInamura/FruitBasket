@@ -1,0 +1,123 @@
+use Libraries.Game.Game
+use Libraries.Interface.Controls.Button
+use Libraries.Interface.Controls.List
+use Libraries.Interface.Controls.TextField
+use Libraries.Interface.Layouts.FlowLayout
+use Libraries.Interface.Controls.TextField
+use Libraries.Interface.Controls.Control
+use Libraries.Game.Graphics.Label
+use Libraries.Interface.Events.KeyboardEvent
+use Libraries.Game.InputSet
+use Libraries.Game.InputTable
+use Libraries.Game.Graphics.Color
+use Libraries.Interface.Events.FocusEvent
+use Libraries.Interface.Events.FocusListener
+
+class Main is Game, FocusListener
+    TextField txtFruit
+    List lstBasket
+    Label lblFruit
+    Control ctlInputArea
+    Control ctlActionArea
+    FlowLayout flowInputArea
+    FlowLayout flowActionArea
+    
+    action Main
+        StartGame()
+    end
+
+    action CreateGame
+        FlowLayout flow
+        SetLayout(flow)
+
+        txtFruit:SetName("Please Enter Fruit")
+        txtFruit:SetPercentageWidth(0.8)
+        
+        lblFruit:SetText("Please Enter Fruit")
+    
+        AddBehavior addBehavior
+        addBehavior:SetTxtFruit(txtFruit)
+        addBehavior:SetLstBasket(lstBasket)
+    
+        Button btnAdd
+        btnAdd:SetName("Add")
+        btnAdd:SetTopPadding(4)
+        btnAdd:SetBottomPadding(4)
+        btnAdd:SetBehavior(addBehavior)
+
+        RemoveBehavior removeBehavior
+        removeBehavior:SetLstBasket(lstBasket)
+
+        Button btnRemove
+        btnRemove:SetName("Remove")
+        btnRemove:SetTopPadding(4)
+        btnRemove:SetBottomPadding(4)
+        btnRemove:SetBehavior(removeBehavior)
+
+        lstBasket:SetName("Basket")
+        lstBasket:SetPercentageHeight(0.95)
+        lstBasket:SetPercentageWidth(0.38)
+        lstBasket:SetTopPadding(5)
+
+        ctlInputArea:Add(lblFruit)
+        ctlInputArea:Add(txtFruit)
+        
+        ctlInputArea:SetPercentageWidth(0.4)       
+        ctlInputArea:SetLayout(flowInputArea)
+
+        Add(ctlInputArea)
+        
+        ctlActionArea:Add(btnAdd)
+        ctlActionArea:Add(btnRemove)
+
+        ctlActionArea:SetPercentageWidth(0.1)
+        ctlActionArea:SetLayout(flowActionArea)
+
+        Add(ctlActionArea)
+        
+        Add(lstBasket)
+
+        KeyboardEvent keys
+        InputTable textFieldInputs = GetInputTable(txtFruit:GetInputGroup())
+        InputSet enter
+        enter:SetKeyboardInput(keys:ENTER) //this is not an action
+        textFieldInputs:Add(enter, addBehavior)
+
+        InputTable listInputs = GetInputTable(lstBasket:GetInputGroup())
+        InputSet delete
+        delete:SetKeyboardInput(keys:FORWARD_DELETE)
+        listInputs:Add(delete, removeBehavior)
+
+        txtFruit:SetPreviousFocus(lstBasket)
+        txtFruit:SetNextFocus(btnAdd)
+        btnAdd:SetPreviousFocus(txtFruit)
+        btnAdd:SetNextFocus(btnRemove)
+        btnRemove:SetPreviousFocus(btnAdd)
+        btnRemove:SetNextFocus(lstBasket)
+        lstBasket:SetPreviousFocus(btnRemove)
+        lstBasket:SetNextFocus(txtFruit)
+        SetFocus(txtFruit)
+
+        AddFocusListener(me)
+    end
+
+    action Update(number seconds)
+    end
+
+    action GainedFocus(FocusEvent event)
+        Control previous = cast(Control, event:GetLastFocus())
+
+        if previous is Button
+            previous:SetName(previous:GetName():ToUpperCase())
+            previous:LoadGraphics(previous:GetCurrentLayoutProperties())
+        end
+    end
+
+    action LostFocus(FocusEvent event)
+        Control previous = cast(Control, event:GetLastFocus())
+
+        if previous is Button
+            previous:SetName(previous:GetName():ToLowerCase())
+        end
+    end
+end

@@ -1,0 +1,33 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Interface.Controls.TextField
+use Libraries.Interface.Controls.List
+
+class AddBehavior is Behavior
+    TextField txtFruit = undefined
+    List lstBasket= undefined
+
+    action Run(BehaviorEvent event)
+        lstBasket:Add(txtFruit:GetText())
+        txtFruit:Empty()
+        
+        txtFruit:Focus()
+    end
+
+    action GetTxtFruit returns TextField
+        return txtFruit
+    end
+
+    action SetTxtFruit(TextField txtFruit)
+        me:txtFruit = txtFruit
+    end
+
+    action GetLstBasket returns List
+        return lstBasket
+    end
+
+    action SetLstBasket(List lstBasket)
+        me:lstBasket = lstBasket
+    end
+
+end

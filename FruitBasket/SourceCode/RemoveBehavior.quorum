@@ -1,0 +1,28 @@
+use Libraries.Interface.Behaviors.Behavior
+use Libraries.Interface.Events.BehaviorEvent
+use Libraries.Interface.Controls.TextField
+use Libraries.Interface.Controls.List
+use Libraries.Interface.Selections.ListSelection
+use Libraries.Interface.Controls.ListItem
+use Libraries.Containers.Array
+
+class RemoveBehavior is Behavior
+    List lstBasket= undefined
+
+    action Run(BehaviorEvent event)
+        ListSelection selection = lstBasket:GetSelection()
+        integer index = selection:GetIndex()
+        Array<ListItem> items = lstBasket:GetListItems()
+        items:RemoveAt(index)
+        lstBasket:Resize()
+    end
+
+    action GetLstBasket returns List
+        return lstBasket
+    end
+
+    action SetLstBasket(List lstBasket)
+        me:lstBasket = lstBasket
+    end
+
+end
